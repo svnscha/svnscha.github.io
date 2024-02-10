@@ -1,4 +1,4 @@
-base_url = "https://svnscha.github.io"
+base_url = "https://svnscha.de"
 title = "svnscha"
 generate_feed = true
 minify_html = true
