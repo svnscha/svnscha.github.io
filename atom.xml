@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>svnscha</title>
+    <subtitle>automating annoying tasks, sharing tips, and embracing less frustration</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://svnscha.de/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://svnscha.de"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-02-12T00:00:00+00:00</updated>
+    <id>https://svnscha.de/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Simplify Visual Studio Installation</title>
+        <published>2024-02-12T00:00:00+00:00</published>
+        <updated>2024-02-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://svnscha.de/posts/simplify-vs/"/>
+        <id>https://svnscha.de/posts/simplify-vs/</id>
+        
+        <content type="html" xml:base="https://svnscha.de/posts/simplify-vs/">&lt;h2 id=&quot;why-you-ask&quot;&gt;Why, You Ask?&lt;&#x2F;h2&gt;
+&lt;p&gt;Every year, like clockwork, I find myself setting up my local dev environment from scratch. And every time, it&#x27;s the same old song and dance: downloading, installing, configuring.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;It&#x27;s time-consuming and frustrating. I&#x27;m tired of it.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;can-it-be-easier&quot;&gt;Can It Be Easier?&lt;&#x2F;h2&gt;
+&lt;p&gt;What if setting up a new machine, rolling it back, or tweaking it could be as simple as running a build on a server? What if I told you we could apply the same principles of automation to our local setups?&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;let-s-find-a-solution&quot;&gt;Let&#x27;s Find A Solution&lt;&#x2F;h2&gt;
+&lt;p&gt;Creating a new development environment shouldn&#x27;t be a chore. It should be quick, painless, and even a little bit fun. To turn this dream into reality, I need two things: the right software and the perfect setup. That&#x27;s where &lt;code&gt;winget&lt;&#x2F;code&gt; and &lt;code&gt;.vsconfig&lt;&#x2F;code&gt; come in.&lt;&#x2F;p&gt;
+&lt;p&gt;With a list of essential software and some PowerShell tricks, I began to make boring tasks automatic. I picked each program, from 7Zip to Visual Studio, for its important use. But the adventure of automating everything is a story for another time.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;streamlining-visual-studio-installation&quot;&gt;Streamlining Visual Studio Installation&lt;&#x2F;h3&gt;
+&lt;p&gt;My main event? Automating Visual Studio installation. Using &lt;code&gt;winget&lt;&#x2F;code&gt;, I can install Visual Studio with just a line:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;powershell&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-powershell &quot;&gt;&lt;code class=&quot;language-powershell&quot; data-lang=&quot;powershell&quot;&gt;&lt;span&gt;winget install -e --id Microsoft.VisualStudio.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;2022.&lt;&#x2F;span&gt;&lt;span&gt;Enterprise --silent
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But I didn&#x27;t stop there. With the &lt;code&gt;--override&lt;&#x2F;code&gt; flag, I tailored the installation to include specific workloads, like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;powershell&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-powershell &quot;&gt;&lt;code class=&quot;language-powershell&quot; data-lang=&quot;powershell&quot;&gt;&lt;span&gt;winget install -e --id Microsoft.VisualStudio.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;2022.&lt;&#x2F;span&gt;&lt;span&gt;Enterprise --silent --override &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;--wait --quiet --addProductLang En-us --config C:\vs2022.vsconfig&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This method sets up Visual Studio with the workload I need without having to manually select each package.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;what-s-vsconfig&quot;&gt;What&#x27;s &lt;code&gt;.vsconfig&lt;&#x2F;code&gt;?&lt;&#x2F;h4&gt;
+&lt;p&gt;&lt;code&gt;.vsconfig&lt;&#x2F;code&gt; helps me easily replicate my development environment wherever I am. It&#x27;s a JSON file that, with just a few clicks in the Visual Studio Installer, allows me to compress my environment workloads into a neat package. This approach is not only perfect for keeping &lt;strong&gt;build servers&lt;&#x2F;strong&gt; and &lt;strong&gt;personal development environments in sync&lt;&#x2F;strong&gt; with identical workloads, but it also simplifies sharing updates and changes with teammates.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Example: vs2022.vsconfig&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;json&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-json &quot;&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;version&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;1.0&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;components&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: [
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Roslyn.Compiler&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.Component.MSBuild&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Roslyn.LanguageServices&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.SQL.LocalDB.Runtime&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.CoreEditor&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Workload.CoreEditor&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.TypeScript.TSServer&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.JavaScript.TypeScript&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.TextTemplating&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.NuGet&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.IntelliTrace.FrontEnd&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Debugger.JustInTime&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Component.Microsoft.VisualStudio.LiveShare.2022&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.IntelliCode&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.ClassDesigner&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.GraphDocument&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.CodeMap&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.CoreIde&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Tools.x86.x64&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Graphics.Tools&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.DiagnosticTools&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Windows11SDK.22621&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.ATL&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.SecurityIssueAnalysis&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.ArchitectureTools.Native&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Redist.14.Latest&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Windows11Sdk.WindowsPerformanceToolkit&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.CppBuildInsights&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions.CMake&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.CMake.Project&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.TestAdapterForBoostTest&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.TestAdapterForGoogleTest&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.ASAN&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Vcpkg&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Tools.ARM64EC&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Workload.NativeDesktop&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Runtimes.ARM64EC.Spectre&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;  ]
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You can create a .vsconfig file with these easy steps:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Launch the Visual Studio Installer and choose to modify your setup.&lt;&#x2F;li&gt;
+&lt;li&gt;Hit More and then select the option to Export your settings into a .vsconfig file.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;That&#x27;s it!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;why-bother-with-all-this&quot;&gt;Why Bother With All This?&lt;&#x2F;h3&gt;
+&lt;p&gt;I&#x27;m all about making life easier, not harder. Thanks to &lt;code&gt;winget&lt;&#x2F;code&gt; and Visual Studio&#x27;s &lt;code&gt;.vsconfig&lt;&#x2F;code&gt;, what used to eat up a lot of time now takes no time at all.&lt;&#x2F;p&gt;
+&lt;p&gt;Setting up a fresh development environment is now a piece of cake - and I mean the kind of delicious cake you can buy ready-made but tastes as good as anything you&#x27;d bake yourself. So here&#x27;s to spending less time on setup and more on the fun stuff: coding.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Blog Motivation</title>
+        <published>2024-02-10T00:00:00+00:00</published>
+        <updated>2024-02-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://svnscha.de/posts/blog-motivation/"/>
+        <id>https://svnscha.de/posts/blog-motivation/</id>
+        
+        <content type="html" xml:base="https://svnscha.de/posts/blog-motivation/">&lt;h2 id=&quot;why-you-ask&quot;&gt;Why, You Ask?&lt;&#x2F;h2&gt;
+&lt;p&gt;We all have those annoying little tasks that pop up a few times a year. They&#x27;re too rare to make fixing them a big deal but happen just enough to be really annoying. Think about setting up a new laptop, sorting out files, refactor that &lt;code&gt;NULL&lt;&#x2F;code&gt; to &lt;code&gt;nullptr&lt;&#x2F;code&gt; or those updates that take forever. It eats up time and patience. &lt;strong&gt;I&#x27;m tired of it.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;changing-things-up&quot;&gt;Changing Things Up&lt;&#x2F;h2&gt;
+&lt;p&gt;I started this blog not just to talk tech but to tackle these annoying moments head-on. My goal? To stop saying &lt;em&gt;&amp;quot;it&#x27;s not worth fixing&amp;quot;&lt;&#x2F;em&gt; and start finding ways to make these tasks less of a headache. Even those things we do once in a blue moon? Yeah, I want to automate those too. And I&#x27;ll share every step right here.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-i-share&quot;&gt;Why I Share&lt;&#x2F;h2&gt;
+&lt;p&gt;This blog is my playground and my megaphone. It&#x27;s where I try out new ideas to make life easier and then shout out what works. Each post starts with my cheeky&lt;&#x2F;p&gt;
+&lt;center&gt;&quot;Why, You Ask?&quot;&lt;&#x2F;center&gt;
+&lt;p&gt;and always circles back to me spilling the beans on how I truly feel, which usually is&lt;&#x2F;p&gt;
+&lt;center&gt;&quot;I&#x27;m tired of it.&quot;&lt;&#x2F;center&gt;
+&lt;p&gt;It&#x27;s my unique approach, sprinkled with a dash of sarcasm, as I navigate through the mayhem, assuring you that behind every vent, there&#x27;s a solid reason and, believe it or not, a solution waiting to be uncovered.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;it-s-not-just-about-being-lazy&quot;&gt;It&#x27;s Not Just About Being Lazy&lt;&#x2F;h2&gt;
+&lt;p&gt;But there&#x27;s more to it. It&#x27;s not just about making things easier. It&#x27;s about sharing knowledge, opinions, and sometimes just a good rant. If I find something cool or a smart way to dodge those digital chores, I&#x27;ll put it here. It&#x27;s about helping each other out, sparking new ideas, and maybe making you think, &amp;quot;Hey, I&#x27;ve been there too!&amp;quot;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;come-along-for-the-ride&quot;&gt;Come Along for the Ride&lt;&#x2F;h2&gt;
+&lt;p&gt;If you&#x27;re nodding along, thinking of your own digital chores, this is the place for you. Dive into the tricks I&#x27;ve found, share your thoughts, or just enjoy knowing you&#x27;re not the only one who gets fed up. Let&#x27;s make those time-sucking tasks history, together.&lt;&#x2F;p&gt;
+&lt;p&gt;Welcome to my quest for a smoother, simpler tech life. Here&#x27;s to less frustration and more time doing what we love. Let&#x27;s kick those annoying tasks to the curb.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
