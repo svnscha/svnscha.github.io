@@ -1,6 +1,6 @@
 +++
-title = "Automate Visual Studio Installation using .vsconfig"
-date = "2024-02-10"
+title = "Simplify Visual Studio Installation"
+date = "2024-02-12"
 +++
 
 ## Why, You Ask?

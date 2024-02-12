@@ -13,7 +13,7 @@
     }
     </style>
     <div class="main">
-        <a href={{ config.base_url }}>{{ config.title }}</a>
+        <a title="{{ config.title }}" href={{ config.base_url }}>{{ config.title }}</a>
 
         <div class="socials">
             {% for social in config.extra.socials %}
@@ -38,8 +38,8 @@
         {% endif %}
     </nav>
     <div id="wrapper">
-        <a href={{ config.base_url }}>
-            <img src="https://avatars.githubusercontent.com/u/24257042?v=4" class="avatar" />
+        <a title="{{ config.title }}" href={{ config.base_url }}>
+            <img alt="{{ config.title }} - Profile Picture" src="https://avatars.githubusercontent.com/u/24257042?v=4" class="avatar" />
         </a>
     </div>
 </header>
