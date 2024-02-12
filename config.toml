@@ -1,5 +1,6 @@
 base_url = "https://svnscha.de"
 title = "svnscha"
+description = "automating annoying tasks, sharing tips, and embracing less frustration"
 generate_feed = true
 minify_html = true
 compile_sass = true

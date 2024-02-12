@@ -1,6 +1,7 @@
 +++
 title = "About"
 path = "about"
+description = "Focus, Technical Expertise and my journey so far."
 +++
 
 Hello! I'm a seasoned software engineer and technology enthusiast, currently working at [vast Limits GmbH](https://vastlimits.com/), where I contribute to the development of [uberAgent](https://uberagent.com/). With a passion that sits at the crossroads of Win32, driver development, and language crafting, I bring over 15 years of experience primarily in **C++** to the table.

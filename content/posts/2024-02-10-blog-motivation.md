@@ -1,6 +1,7 @@
 +++
 title = "Blog Motivation"
 date = "2024-02-10"
+description = "Why, You Ask? This is how I blog about automating annoying tasks, sharing tips, and embracing less frustration."
 +++
 
 ## Why, You Ask?

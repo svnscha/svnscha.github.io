@@ -1,5 +1,4 @@
 {% macro list_posts(pages) %}
-<ul>
     {%- for page in pages %}
     <section class="list-item">
         <div class="post-header">
@@ -34,7 +33,6 @@
     </section>
 
     {% endfor -%}
-</ul>
 {% endmacro list_posts %}
 
 {% macro list_terms(terms) %}
