@@ -1,6 +1,6 @@
 :root.dark {
   --text-0: rgba(255, 255, 255, 87%);
-  --text-1: rgba(255, 255, 255, 60%);
+  --text-1: #B8B8B8;
 
   --bg-0: #1c2026;
   --bg-1: rgba(255, 255, 255, 5%);
@@ -11,5 +11,13 @@
 
   .social>img {
     filter: invert(1);
+  }
+
+  time {
+    color: var(--text-1);
+  }
+
+  .meta {
+    color: var(--text-1)
   }
 }

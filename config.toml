@@ -13,7 +13,7 @@ highlight_theme = "two-dark"
 [extra]
 use_cdn = false
 theme = "dark"
-mathjax = true
+mathjax = false
 footer = "Copyright © 2024 Sven Scharmentke. All rights reserved."
 
 menu = [
