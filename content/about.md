@@ -4,17 +4,17 @@ path = "about"
 description = "Focus, Technical Expertise and my journey so far."
 +++
 
-Hello! I'm a seasoned software engineer and technology enthusiast, currently working at [vast Limits GmbH](https://vastlimits.com/), where I contribute to the development of [uberAgent](https://uberagent.com/). With a passion that sits at the crossroads of Win32, driver development, and language crafting, I bring over 15 years of experience primarily in **C++** to the table.
+Hello! I'm a seasoned software engineer and technology enthusiast, currently working on [uberAgent](https://uberagent.com), [Citrix](https://citrix.com) @ [Cloud Software Group](https://cloud.com). With a passion that sits at the crossroads of Win32, driver development, and language crafting, I bring over 15 years of experience primarily in **C++** to the table.
 
 ## Professional Journey
 
-- **Current Role**: Contributing my skills and knowledge at **vast Limits GmbH**, focusing uberAgent.
+- **Current Role**: Contributing my skills and knowledge at **Citrix**, focusing uberAgent.
   - Key Contributions:
     - Developed uAQL, a bespoke query language for uberAgent.
     - Developed uberAgentNetMon, a kernel-level network monitoring driver.
     - Developed uberAgentFilter, a kernel mini-filter driver for filesystem monitoring.
 - **Specialties**: As a **Win32 and Kernel Enthusiast** & **Language-Crafting Aficionado**, I have a deep understanding of Windows internals and a knack for creating robust, efficient software.
-- **Founder of Liasoft**: Before my time at vast Limits, I founded Liasoft, a venture I actively manage. Our key project, the [antispy SDK](https://antispy.xyz), is a **C++ obfuscation library** designed to enhance software security. This initiative underscores my dedication to improving software protection and integrity.
+- **Founder of Liasoft**: I founded Liasoft, a venture I actively manage. Our key project, the [antispy SDK](https://antispy.xyz), is a **C++ obfuscation library** designed to enhance software security. This initiative underscores my dedication to improving software protection and integrity.
 
 ## Technical Expertise
 
