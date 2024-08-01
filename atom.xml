@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>svnscha</title>
+    <subtitle>automating annoying tasks, sharing tips, and embracing less frustration</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://svnscha.de/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://svnscha.de"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-04-24T00:00:00+00:00</updated>
+    <id>https://svnscha.de/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Simplify Elasticsearch and Kibana Installation</title>
+        <published>2024-04-24T00:00:00+00:00</published>
+        <updated>2024-04-24T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://svnscha.de/posts/simplify-elasticsearch-kibana/"/>
+        <id>https://svnscha.de/posts/simplify-elasticsearch-kibana/</id>
+        
+        <content type="html" xml:base="https://svnscha.de/posts/simplify-elasticsearch-kibana/">&lt;h2 id=&quot;why-you-ask&quot;&gt;Why, You Ask?&lt;&#x2F;h2&gt;
+&lt;p&gt;Every time I set up a new instance of Elasticsearch and Kibana, the repetitive steps grated on me. Updating the system, configuring repositories, installing packages... surely there&#x27;s a better way? And thus, the quest for automation began. Not only to save my own time but to provide a robust foundation for others in the community facing the same tedious setup.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;It&#x27;s time-consuming and frustrating. I&#x27;m tired of it.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;automating-elasticsearch-and-kibana-setup-a-journey-to-simplicity&quot;&gt;Automating Elasticsearch and Kibana Setup: A Journey to Simplicity&lt;&#x2F;h2&gt;
+&lt;p&gt;In our ever-expanding digital landscape, data is no longer just a resource; it&#x27;s an entire ecosystem. Managing this ecosystem efficiently requires robust tools like Elasticsearch and Kibana. But let&#x27;s be honest, the setup can be a drag! Inspired by my own need for simplification and a love for automating mundane tasks, I embarked on a journey to streamline this setup process. Let me walk you through how I created a bash script that sets up Elasticsearch and Kibana on a single-node cluster with minimal fuss.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-choose-a-bash-script&quot;&gt;Why Choose a Bash Script?&lt;&#x2F;h2&gt;
+&lt;p&gt;You might be wondering why I opted for a Bash script over more sophisticated tools like Ansible. Well, the answer is straightforward: I appreciate simplicity. Bash scripts are incredibly versatile—perfect for cloud-init scripts in my homelab or even within Docker environments. This approach keeps things simple, avoiding the need for extra tools or complexities. It&#x27;s just easier that way!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;building-the-script-a-step-by-step-guide&quot;&gt;Building the Script: A Step-by-Step Guide&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s walk through the crafting of the script that automates setting up Elasticsearch and Kibana. Here&#x27;s how I pieced it together, one step at a time:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Checking for Superuser Privileges
+Every great adventure starts with a little bit of power. What&#x27;s more powerful than starting off with full system access?&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;[ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;id -u&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;)&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;0&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;then
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;This script must be run as root&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;2
+&lt;&#x2F;span&gt;&lt;span&gt;   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;exit&lt;&#x2F;span&gt;&lt;span&gt; 1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;fi
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;Updating the System and Installing Essential Packages
+Think of this as prepping your car before a long road trip. A well-oiled machine avoids breakdowns, and that&#x27;s exactly what we&#x27;re aiming for—no surprises!&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;apt&lt;&#x2F;span&gt;&lt;span&gt; update
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;apt&lt;&#x2F;span&gt;&lt;span&gt; install&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt; -y&lt;&#x2F;span&gt;&lt;span&gt; apt-transport-https gnupg curl jq
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;Adding the Elasticsearch Repository
+Getting this right is like picking the perfect ingredients for a master chef recipe—it ensures the rest of the meal turns out just right.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Installing Elasticsearch and Kibana
+This is where the transformation happens. What was once a bare-metal server soon becomes a powerful tool capable of sifting through vast amounts of data.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Configuring and Starting Services
+The plot thickens! Setting up the services and getting them running is like reaching the climax of our story—where all elements come together to unveil the full potential of our setup.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Rather than churn out another cookie-cutter guide on setting up Elasticsearch and Kibana, you can view the complete script &lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;svnscha&#x2F;676291c9e1cdbfa261202b3897afba37&quot;&gt;here&lt;&#x2F;a&gt;. However, I do want to emphasize the initial configuration process involving enrollment tokens and security settings. I&#x27;ve automated these aspects because, let&#x27;s face it, I&#x27;ve read too many guides that suggest just turning off security for the sake of simplicity. That&#x27;s not my style—I&#x27;d rather keep things secure automatically. It&#x27;s not rocket science, but it sure is critical. Why simplify by compromising security when you can automate it effectively, right?&lt;&#x2F;p&gt;
+&lt;p&gt;This approach ensures you get the functionality you need without the hassle of manual setup or the risks of disabled security.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;perfecting-the-automation-securing-and-finalizing-the-setup&quot;&gt;Perfecting the Automation: Securing and Finalizing the Setup&lt;&#x2F;h2&gt;
+&lt;p&gt;As we approach the climax of our automation journey, it&#x27;s all about ensuring that our Elasticsearch and Kibana setup not only functions but is also secured and ready for action. This part of the script is where the real magic happens—turning a fresh install into a secured and operational data exploration environment.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Broadcasting the Good News
+First things first, let&#x27;s make sure any user logging into the system knows what&#x27;s been accomplished:&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;-e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;=== init-vm.sh: Initial ===&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt; &#x2F;etc&#x2F;motd
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;-e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;[&amp;gt; Elasticsearch &amp;#39;elastic&amp;#39; password: $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ELASTIC_PASSWORD&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt; &#x2F;etc&#x2F;motd
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;-e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;[&amp;gt; Test instance with &amp;#39;curl -k -X GET https:&#x2F;&#x2F;elastic:$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ELASTIC_PASSWORD&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;@localhost:9200&amp;#39;&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt; &#x2F;etc&#x2F;motd
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;-e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;=== init-vm.sh: Get started ===&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt; &#x2F;etc&#x2F;motd
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;-e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;[&amp;gt; Reset &amp;#39;elastic&amp;#39; password with &amp;#39;&#x2F;usr&#x2F;share&#x2F;elasticsearch&#x2F;bin&#x2F;elasticsearch-reset-password -u elastic&amp;#39;.&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt; &#x2F;etc&#x2F;motd
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, we&#x27;re updating the message of the day (MOTD) file to ensure anyone who logs in is immediately informed about how to interact with Elasticsearch and what steps to take next. It&#x27;s like leaving a note on the fridge - impossible to ignore and incredibly helpful.&lt;&#x2F;p&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;Decoding the Secrets
+Automation isn&#x27;t just about doing things without human intervention; it&#x27;s also about doing them securely and wisely:&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;# Because who likes doing setup manually, right?
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;decoded_token&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;KIBANA_ENROLLMENT_TOKEN &lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;base64 --decode&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;address&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;decoded_token &lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;jq -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;.adr[0]&amp;#39;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;fingerprint&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;decoded_token &lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;jq -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;.fgr&amp;#39;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;api_key&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;decoded_token &lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;jq -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;.key&amp;#39;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Decoding the enrollment token reveals the essential elements needed to securely configure Kibana: the address, fingerprint, and API key.&lt;&#x2F;p&gt;
+&lt;p&gt;Harnessing Version and Build Information
+Knowing exactly which version and build of Kibana you&#x27;re working with is required for the API, so let&#x27;s get that:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ver&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;jq -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;.version&amp;#39; &#x2F;usr&#x2F;share&#x2F;kibana&#x2F;package.json)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;build&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;jq -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;.build.number&amp;#39; &#x2F;usr&#x2F;share&#x2F;kibana&#x2F;package.json)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;Re-encoding and Verification
+Secrecy is paramount, and so is verification. Here&#x27;s how we handle both:&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;encoded_api_key&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;-n &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;api_key &lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;base64&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;output&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;sudo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt; &#x2F;usr&#x2F;share&#x2F;kibana&#x2F;bin&#x2F;kibana-verification-code)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;verification_code&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;output &lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;awk -F&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;: &amp;quot; &amp;#39;{print $2}&amp;#39; &lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;sed &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;s&#x2F; &#x2F;&#x2F;g&amp;#39;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The API key needs to be re-encoded to maintain security, and we also extract a verification code necessary for the next step—enrolling Kibana.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-final-act-enrolling-kibana&quot;&gt;The Final Act: Enrolling Kibana&lt;&#x2F;h2&gt;
+&lt;p&gt;And now, the final piece of our automation puzzle:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;curl -k -v -X&lt;&#x2F;span&gt;&lt;span&gt; POST &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;http:&#x2F;&#x2F;localhost:5601&#x2F;internal&#x2F;interactive_setup&#x2F;enroll&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Accept: *&#x2F;*&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Content-Type: application&#x2F;json&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Host: localhost:5601&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Origin: http:&#x2F;&#x2F;localhost:5601&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Referer: http:&#x2F;&#x2F;localhost:5601&#x2F;&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;kbn-build-number: $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;build&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;kbn-version: $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ver&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;x-elastic-internal-origin: Kibana&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -H &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;x-kbn-context: %7B%22type%22%3A%22application%22%2C%22name%22%3A%22interactiveSetup%22%2C%22url%22%3A%22%2F%22%7D&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;     -d &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;{&amp;quot;hosts&amp;quot;:[&amp;quot;https:&#x2F;&#x2F;&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;address&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;&amp;quot;],&amp;quot;apiKey&amp;quot;:&amp;quot;&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;encoded_api_key&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;&amp;quot;,&amp;quot;caFingerprint&amp;quot;:&amp;quot;&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;fingerprint&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;&amp;quot;,&amp;quot;code&amp;quot;:&amp;quot;&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;verification_code&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;#39;&amp;quot;}&amp;#39;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This curl command not only sends all the needed parameters to Kibana for configuration but also uses the verification code to ensure that the setup is both authorized and secure. It&#x27;s akin to dotting the i&#x27;s and crossing the t&#x27;s in our setup script.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;wrapping-up&quot;&gt;Wrapping Up&lt;&#x2F;h3&gt;
+&lt;p&gt;From the mundane to the technical, every line of code we&#x27;ve added builds towards making Elasticsearch and Kibana not just operational but secured and ready for whatever data you throw at it. Feel free to dive into the full script, tweak it, use it, and share it. After all, isn&#x27;t the whole point of automation to make life a bit easier?&lt;&#x2F;p&gt;
+&lt;p&gt;Check out the complete script here:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;svnscha&#x2F;676291c9e1cdbfa261202b3897afba37&quot;&gt;init-elastic-search-kibana-vm.sh&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Happy automating, and here&#x27;s to many insightful data explorations!&lt;&#x2F;p&gt;
+&lt;p&gt;P.S.: This script is tailored for automating development environments. Remember, a single-node cluster isn’t suited for production use, and storing passwords in the message of the day (MOTD) file? That’s a no-go for serious deployments. 😏&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simplify Visual Studio Installation</title>
+        <published>2024-02-12T00:00:00+00:00</published>
+        <updated>2024-02-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://svnscha.de/posts/simplify-vs/"/>
+        <id>https://svnscha.de/posts/simplify-vs/</id>
+        
+        <content type="html" xml:base="https://svnscha.de/posts/simplify-vs/">&lt;h2 id=&quot;why-you-ask&quot;&gt;Why, You Ask?&lt;&#x2F;h2&gt;
+&lt;p&gt;Every year, like clockwork, I find myself setting up my local dev environment from scratch. And every time, it&#x27;s the same old song and dance: downloading, installing, configuring.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;It&#x27;s time-consuming and frustrating. I&#x27;m tired of it.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;can-it-be-easier&quot;&gt;Can It Be Easier?&lt;&#x2F;h2&gt;
+&lt;p&gt;What if setting up a new machine, rolling it back, or tweaking it could be as simple as running a build on a server? What if I told you we could apply the same principles of automation to our local setups?&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;let-s-find-a-solution&quot;&gt;Let&#x27;s Find A Solution&lt;&#x2F;h2&gt;
+&lt;p&gt;Creating a new development environment shouldn&#x27;t be a chore. It should be quick, painless, and even a little bit fun. To turn this dream into reality, I need two things: the right software and the perfect setup. That&#x27;s where &lt;code&gt;winget&lt;&#x2F;code&gt; and &lt;code&gt;.vsconfig&lt;&#x2F;code&gt; come in.&lt;&#x2F;p&gt;
+&lt;p&gt;With a list of essential software and some PowerShell tricks, I began to make boring tasks automatic. I picked each program, from 7Zip to Visual Studio, for its important use. But the adventure of automating everything is a story for another time.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;streamlining-visual-studio-installation&quot;&gt;Streamlining Visual Studio Installation&lt;&#x2F;h3&gt;
+&lt;p&gt;My main event? Automating Visual Studio installation. Using &lt;code&gt;winget&lt;&#x2F;code&gt;, I can install Visual Studio with just a line:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;powershell&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-powershell &quot;&gt;&lt;code class=&quot;language-powershell&quot; data-lang=&quot;powershell&quot;&gt;&lt;span&gt;winget install -e --id Microsoft.VisualStudio.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;2022.&lt;&#x2F;span&gt;&lt;span&gt;Enterprise --silent
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But I didn&#x27;t stop there. With the &lt;code&gt;--override&lt;&#x2F;code&gt; flag, I tailored the installation to include specific workloads, like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;powershell&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-powershell &quot;&gt;&lt;code class=&quot;language-powershell&quot; data-lang=&quot;powershell&quot;&gt;&lt;span&gt;winget install -e --id Microsoft.VisualStudio.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;2022.&lt;&#x2F;span&gt;&lt;span&gt;Enterprise --silent --override &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;--wait --quiet --addProductLang En-us --config C:\vs2022.vsconfig&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This method sets up Visual Studio with the workload I need without having to manually select each package.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;what-s-vsconfig&quot;&gt;What&#x27;s &lt;code&gt;.vsconfig&lt;&#x2F;code&gt;?&lt;&#x2F;h4&gt;
+&lt;p&gt;&lt;code&gt;.vsconfig&lt;&#x2F;code&gt; helps me easily replicate my development environment wherever I am. It&#x27;s a JSON file that, with just a few clicks in the Visual Studio Installer, allows me to compress my environment workloads into a neat package. This approach is not only perfect for keeping &lt;strong&gt;build servers&lt;&#x2F;strong&gt; and &lt;strong&gt;personal development environments in sync&lt;&#x2F;strong&gt; with identical workloads, but it also simplifies sharing updates and changes with teammates.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Example: vs2022.vsconfig&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;json&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-json &quot;&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;version&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;1.0&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;components&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: [
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Roslyn.Compiler&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.Component.MSBuild&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Roslyn.LanguageServices&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.SQL.LocalDB.Runtime&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.CoreEditor&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Workload.CoreEditor&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.TypeScript.TSServer&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.JavaScript.TypeScript&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.TextTemplating&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.NuGet&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.IntelliTrace.FrontEnd&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Debugger.JustInTime&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Component.Microsoft.VisualStudio.LiveShare.2022&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.IntelliCode&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.ClassDesigner&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.GraphDocument&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.CodeMap&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.CoreIde&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Tools.x86.x64&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Graphics.Tools&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.DiagnosticTools&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Windows11SDK.22621&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.ATL&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.SecurityIssueAnalysis&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.ArchitectureTools.Native&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Redist.14.Latest&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Windows11Sdk.WindowsPerformanceToolkit&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.CppBuildInsights&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions.CMake&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.CMake.Project&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.TestAdapterForBoostTest&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.TestAdapterForGoogleTest&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.ASAN&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.Vcpkg&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Tools.ARM64EC&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Workload.NativeDesktop&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;Microsoft.VisualStudio.Component.VC.Runtimes.ARM64EC.Spectre&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;  ]
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You can create a .vsconfig file with these easy steps:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Launch the Visual Studio Installer and choose to modify your setup.&lt;&#x2F;li&gt;
+&lt;li&gt;Hit More and then select the option to Export your settings into a .vsconfig file.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;That&#x27;s it!&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;why-bother-with-all-this&quot;&gt;Why Bother With All This?&lt;&#x2F;h3&gt;
+&lt;p&gt;I&#x27;m all about making life easier, not harder. Thanks to &lt;code&gt;winget&lt;&#x2F;code&gt; and Visual Studio&#x27;s &lt;code&gt;.vsconfig&lt;&#x2F;code&gt;, what used to eat up a lot of time now takes no time at all.&lt;&#x2F;p&gt;
+&lt;p&gt;Setting up a fresh development environment is now a piece of cake - and I mean the kind of delicious cake you can buy ready-made but tastes as good as anything you&#x27;d bake yourself. So here&#x27;s to spending less time on setup and more on the fun stuff: coding.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Blog Motivation</title>
+        <published>2024-02-10T00:00:00+00:00</published>
+        <updated>2024-02-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://svnscha.de/posts/blog-motivation/"/>
+        <id>https://svnscha.de/posts/blog-motivation/</id>
+        
+        <content type="html" xml:base="https://svnscha.de/posts/blog-motivation/">&lt;h2 id=&quot;why-you-ask&quot;&gt;Why, You Ask?&lt;&#x2F;h2&gt;
+&lt;p&gt;We all have those annoying little tasks that pop up a few times a year. They&#x27;re too rare to make fixing them a big deal but happen just enough to be really annoying. Think about setting up a new laptop, sorting out files, refactor that &lt;code&gt;NULL&lt;&#x2F;code&gt; to &lt;code&gt;nullptr&lt;&#x2F;code&gt; or those updates that take forever. It eats up time and patience. &lt;strong&gt;I&#x27;m tired of it.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;changing-things-up&quot;&gt;Changing Things Up&lt;&#x2F;h2&gt;
+&lt;p&gt;I started this blog not just to talk tech but to tackle these annoying moments head-on. My goal? To stop saying &lt;em&gt;&amp;quot;it&#x27;s not worth fixing&amp;quot;&lt;&#x2F;em&gt; and start finding ways to make these tasks less of a headache. Even those things we do once in a blue moon? Yeah, I want to automate those too. And I&#x27;ll share every step right here.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-i-share&quot;&gt;Why I Share&lt;&#x2F;h2&gt;
+&lt;p&gt;This blog is my playground and my megaphone. It&#x27;s where I try out new ideas to make life easier and then shout out what works. Each post starts with my cheeky&lt;&#x2F;p&gt;
+&lt;center&gt;&quot;Why, You Ask?&quot;&lt;&#x2F;center&gt;
+&lt;p&gt;and always circles back to me spilling the beans on how I truly feel, which usually is&lt;&#x2F;p&gt;
+&lt;center&gt;&quot;I&#x27;m tired of it.&quot;&lt;&#x2F;center&gt;
+&lt;p&gt;It&#x27;s my unique approach, sprinkled with a dash of sarcasm, as I navigate through the mayhem, assuring you that behind every vent, there&#x27;s a solid reason and, believe it or not, a solution waiting to be uncovered.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;it-s-not-just-about-being-lazy&quot;&gt;It&#x27;s Not Just About Being Lazy&lt;&#x2F;h2&gt;
+&lt;p&gt;But there&#x27;s more to it. It&#x27;s not just about making things easier. It&#x27;s about sharing knowledge, opinions, and sometimes just a good rant. If I find something cool or a smart way to dodge those digital chores, I&#x27;ll put it here. It&#x27;s about helping each other out, sparking new ideas, and maybe making you think, &amp;quot;Hey, I&#x27;ve been there too!&amp;quot;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;come-along-for-the-ride&quot;&gt;Come Along for the Ride&lt;&#x2F;h2&gt;
+&lt;p&gt;If you&#x27;re nodding along, thinking of your own digital chores, this is the place for you. Dive into the tricks I&#x27;ve found, share your thoughts, or just enjoy knowing you&#x27;re not the only one who gets fed up. Let&#x27;s make those time-sucking tasks history, together.&lt;&#x2F;p&gt;
+&lt;p&gt;Welcome to my quest for a smoother, simpler tech life. Here&#x27;s to less frustration and more time doing what we love. Let&#x27;s kick those annoying tasks to the curb.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
