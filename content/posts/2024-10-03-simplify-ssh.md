@@ -111,7 +111,7 @@ Let's create a script that starts the SSH agent, adds your key, and gives you co
 Whenever you want to start your SSH agent for a session, just run:
 
 ```bash
-init-ssh
+. init-ssh
 ```
 
 This will start the agent, add your key, and show you a list of the keys currently loaded in the agent. You've got full control — start the agent when you want, stop it when you're done, and enjoy a password-free SSH experience for the duration of that session.
