@@ -152,7 +152,7 @@ At the end of the day, if you're serious about AI training and need a balance of
 
 Prompt: `implement fibonacci in python and also some unit tests using pytest`
 
-<video src="/casts/codellama-13b-fibonacci.webm" controls>
+<video class="cast" src="/casts/codellama-13b-fibonacci.webm" controls>
   Your browser does not support the video tag.
 </video>
 
@@ -160,7 +160,7 @@ Prompt: `implement fibonacci in python and also some unit tests using pytest`
 
 Prompt: `implement fibonacci in python and also some unit tests using pytest`
 
-<video src="/casts/gemma3-12b-fibonacci.webm" controls>
+<video class="cast" src="/casts/gemma3-12b-fibonacci.webm" controls>
   Your browser does not support the video tag.
 </video>
 
