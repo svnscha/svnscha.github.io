@@ -15,7 +15,7 @@ highlight_theme = "two-dark"
 use_cdn = false
 theme = "dark"
 mathjax = false
-footer = "Copyright © 2024 Sven Scharmentke. All rights reserved."
+footer = "Copyright © 2025 Sven Scharmentke. All rights reserved."
 
 menu = [
     { name = "/about", url = "/about", weight = 1 },
