@@ -138,7 +138,7 @@ Here's a quick breakdown of solid options:
 - NVIDIA RTX 3090 - Powerful, with 24 GB of VRAM, but it's last-gen. ($$)
 - NVIDIA RTX 4090 - Even more powerful, with 24 GB of VRAM and better efficiency. ($$$)
 - NVIDIA RTX 5090 - Even more and more powerful, with 24 GB of VRAM and better efficiency. ($$$$)
-- NVIDIA RTX 4000 ADA Generation - Less pwoerful, but 20 GB of VRAM, and a low-profile card. ($)
+- NVIDIA RTX 4000 ADA Generation - Less powerful, but 20 GB of VRAM, and a low-profile card. ($)
 
 Now, why the ADA 4000? While the RTX 5090 is the fastest in raw compute power, VRAM is king for training AI models. The ADA 4000's 20 GB VRAM gives you enough room for Stable Diffusion training, larger batch sizes, and AI experiments, without hitting the limits of other consumer GPUs such as 3080 (10 GB).
 
