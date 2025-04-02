@@ -19,6 +19,7 @@ footer = "Copyright © 2025 Sven Scharmentke. All rights reserved."
 
 menu = [
     { name = "/about", url = "/about", weight = 1 },
+    { name = "/notes", url = "/notes", weight = 2 },
 ]
 
 socials = [
