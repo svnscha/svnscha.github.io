@@ -1,6 +1,6 @@
 +++
 title = "Fedora: Remove old kernel versions"
-date = "2025-02-03"
+date = "2025-04-02"
 +++
 
 Sometimes, kernel updates pile up like empty pizza boxes on a lazy Sunday. If you're running a Fedora or RHEL-based system, here's how you can check which kernels are installed and clean up the old ones - keeping only the one you're currently using.

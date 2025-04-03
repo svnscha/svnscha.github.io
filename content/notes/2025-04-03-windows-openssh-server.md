@@ -1,6 +1,6 @@
 +++
 title = "Windows: Install integrated OpenSSH Server"
-date = "2025-02-04"
+date = "2025-04-03"
 +++
 
 Tired of everyone SSHing into Linux? Flip the script: SSH into Windows from your Linux box. Works great with VSCode Remote too. Here's how to enable the built-in OpenSSH server on Windows.
