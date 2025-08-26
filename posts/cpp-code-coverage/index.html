@@ -1,0 +1,62 @@
+<!doctype html><html class=dark lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1.0" name=viewport><title>C++: How to measure code coverage with lcov and GTest</title><meta content="C++: How to measure code coverage with lcov and GTest" property=og:title><meta content="Because you want to know which parts of your C++ code are actually being tested." property=og:description><meta content="Because you want to know which parts of your C++ code are actually being tested." name=description><link href=https://svnscha.de/posts/cpp-code-coverage/ rel=canonical><link href=/favicon.ico rel=icon type=image/png><link href=/apple-touch-icon.png rel=apple-touch-icon sizes=180x180><link href=/favicon-32x32.png rel=icon sizes=32x32 type=image/png><link href=/favicon-16x16.png rel=icon sizes=16x16 type=image/png><link href=/site.webmanifest rel=manifest><link href=https://svnscha.de/fonts.css rel=stylesheet><script>var _paq=window._paq=window._paq||[];_paq.push(['disableCookies']);_paq.push(['trackPageView']);_paq.push(['enableLinkTracking']);_paq.push(['enableHeartBeatTimer']);(function(){var a="//analytics.liasoft.de/";_paq.push(['setTrackerUrl',a+ 'matomo.php']);_paq.push(['setSiteId','27']);var b=document,c=b.createElement('script'),d=b.getElementsByTagName('script')[0];c.async=true;c.src=a+ 'matomo.js';d.parentNode.insertBefore(c,d)})()</script><link href=https://svnscha.de/atom.xml rel=alternate title=svnscha type=application/atom+xml><link href=https://svnscha.de/theme/dark.css rel=stylesheet><link href=https://svnscha.de/main.css media=screen rel=stylesheet><link href=https://svnscha.de/lightbox.css rel=stylesheet><body><div class=content><header><style>.avatar{vertical-align:middle;width:150px;height:150px;border-radius:50%}#wrapper{width:100%;clear:both;text-align:center}</style><div class=main><a href=https://svnscha.de title=svnscha>svnscha</a><div class=socials><a class=social href=https://www.linkedin.com/in/svnscha/ rel=me> <img alt=linkedin src=/social_icons/linkedin.svg> </a><a class=social href=https://github.com/svnscha/ rel=me> <img alt=github src=/social_icons/github.svg> </a></div></div><nav><a href=/about style=margin-left:.7em>/about</a><a href=/notes style=margin-left:.7em>/notes</a></nav><div id=wrapper><a href=https://svnscha.de title=svnscha> <img alt="svnscha - Profile Picture" class=avatar src=/svnscha.webp> </a></div></header><main><article><div class=title><h1 class=page-header>C++: How to measure code coverage with lcov and GTest</h1><div class=meta>Posted on <time>2025-03-25</time></div></div><section class=body><h1 id=why-you-ask>Why, You Ask?</h1><p>Because you want to know which parts of your C++ code are actually being tested – not just assumed to be. Code coverage isn't about perfection, but about confidence. And with the right setup, you can easily visualize what's being tested and what's quietly collecting dust.<p>In this guide, we'll walk through:<ul><li>Setting up <code>lcov</code> and GTest<li>Writing effective coverage-focused tests<li>Running the tests and generating reports<li>Interpreting results and achieving real insight<li>Automating it all via GitHub Actions</ul><hr><h2 id=package-try-it-yourself>📦 Try It Yourself</h2><p>Check out the working example repository here:<p>👉 <a href=https://github.com/svnscha/cpp-coverage-example>github.com/svnscha/cpp-coverage-example</a><p>It contains:<ul><li>A minimal <code>MyQueue</code> class<li>Unit tests using GTest<li>Full <code>lcov</code> and <code>genhtml</code> integration<li>A GitHub Actions workflow for automated code coverage with a threshold</ul><hr><h2 id=1-install-required-tools>1. Install Required Tools</h2><p>Make sure your environment has:<ul><li><code>lcov</code><li>A C++ compiler (GCC or Clang)<li><code>cmake</code>, <code>ninja</code><li>GTest (or install <code>libgtest-dev</code> on Ubuntu)</ul><hr><h2 id=2-build-with-coverage-instrumentation>2. Build with Coverage Instrumentation</h2><p>To generate coverage data, compile your code with:<ul><li><code>--coverage</code>: Coverage instrumentation<li><code>-g</code>: Debug information<li><code>-O0</code>: No optimization (to avoid inlining, etc.)</ul><h3 id=tools-minimal-cmake-snippet>🛠 Minimal CMake Snippet</h3><pre class=language-cmake data-lang=cmake style=background:#282c34;color:#abb2bf><code class=language-cmake data-lang=cmake><span style=color:#56b6c2>option</span><span>(ENABLE_COVERAGE </span><span style=color:#98c379>"Enable code coverage reporting" </span><span>OFF)
+</span><span>
+</span><span style=color:#56b6c2>function</span><span>(</span><span style=color:#61afef>enable_coverage </span><span>target)
+</span><span>    </span><span style=color:#c678dd>if</span><span>(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID </span><span style=color:#e06c75>MATCHES </span><span style=color:#98c379>"GNU|Clang"</span><span>)
+</span><span>        </span><span style=color:#56b6c2>target_compile_options</span><span>(${</span><span style=color:#e06c75>target</span><span>} </span><span style=color:#e06c75>PRIVATE </span><span>--coverage -O0 -g)
+</span><span>        </span><span style=color:#56b6c2>target_link_options</span><span>(${</span><span style=color:#e06c75>target</span><span>} </span><span style=color:#e06c75>PRIVATE </span><span>--coverage)
+</span><span>    </span><span style=color:#c678dd>endif</span><span>()
+</span><span style=color:#56b6c2>endfunction</span><span>()
+</span><span>
+</span><span style=color:#56b6c2>enable_testing</span><span>()
+</span><span>
+</span><span style=color:#56b6c2>add_library</span><span>(MyLibrary ...)
+</span><span style=color:#56b6c2>add_executable</span><span>(MyTests ...)
+</span><span style=color:#56b6c2>target_link_libraries</span><span>(MyTests </span><span style=color:#e06c75>PRIVATE </span><span>MyLibrary GTest::gtest_main)
+</span><span>
+</span><span style=color:#c678dd>include</span><span>(GTest)
+</span><span style=color:#e06c75>gtest_discover_tests</span><span>(MyTests)
+</span><span>
+</span><span style=color:#e06c75>enable_coverage</span><span>(MyLibrary)
+</span><span style=color:#e06c75>enable_coverage</span><span>(MyTests)
+</span></code></pre><h2 id=3-write-tests-that-actually-trigger-all-code-paths>3. Write Tests That Actually Trigger All Code Paths</h2><p>Here’s a small utility class as an example:<pre class=language-cpp data-lang=cpp style=background:#282c34;color:#abb2bf><code class=language-cpp data-lang=cpp><span style=color:#c678dd>class </span><span style=color:#e5c07b>MyQueue
+</span><span>{
+</span><span style=color:#c678dd>public</span><span>:
+</span><span>    </span><span style=color:#c678dd>void </span><span style=color:#61afef>Push</span><span>(</span><span style=color:#c678dd>int </span><span style=color:#e06c75>val</span><span>)
+</span><span>    { 
+</span><span>        _q.</span><span style=color:#e06c75>push</span><span>(val); 
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#c678dd>void </span><span style=color:#61afef>Pop</span><span>() 
+</span><span>    {
+</span><span>        </span><span style=color:#c678dd>if </span><span>(_q.</span><span style=color:#e06c75>empty</span><span>())
+</span><span>            </span><span style=color:#c678dd>return</span><span>;
+</span><span>        _q.</span><span style=color:#e06c75>pop</span><span>();
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#c678dd>bool </span><span style=color:#61afef>IsEmpty</span><span>() </span><span style=color:#c678dd>const </span><span>{ </span><span style=color:#c678dd>return</span><span> _q.</span><span style=color:#e06c75>empty</span><span>(); }
+</span><span>
+</span><span style=color:#c678dd>private</span><span>:
+</span><span>    std::queue<</span><span style=color:#c678dd>int</span><span>> _q;
+</span><span>};
+</span></code></pre><p>Now test both normal and edge cases:<pre class=language-cpp data-lang=cpp style=background:#282c34;color:#abb2bf><code class=language-cpp data-lang=cpp><span style=color:#e06c75>TEST</span><span>(MyQueueTest, PopWhenEmpty) {
+</span><span>    MyQueue q;
+</span><span>    q.</span><span style=color:#e06c75>Pop</span><span>(); </span><span style=font-style:italic;color:#5c6370>// Hit the early return
+</span><span>    </span><span style=color:#e06c75>EXPECT_TRUE</span><span>(q.</span><span style=color:#e06c75>IsEmpty</span><span>());
+</span><span>}
+</span><span>
+</span><span style=color:#e06c75>TEST</span><span>(MyQueueTest, PushAndPop) {
+</span><span>    MyQueue q;
+</span><span>    q.</span><span style=color:#e06c75>Push</span><span>(</span><span style=color:#d19a66>42</span><span>);
+</span><span>    </span><span style=color:#e06c75>EXPECT_FALSE</span><span>(q.</span><span style=color:#e06c75>IsEmpty</span><span>());
+</span><span>    q.</span><span style=color:#e06c75>Pop</span><span>();
+</span><span>    </span><span style=color:#e06c75>EXPECT_TRUE</span><span>(q.</span><span style=color:#e06c75>IsEmpty</span><span>());
+</span><span>}
+</span></code></pre><h2 id=4-run-tests-and-generate-coverage-report>4. Run Tests and Generate Coverage Report</h2><pre class=language-cpp data-lang=cpp style=background:#282c34;color:#abb2bf><code class=language-cpp data-lang=cpp><span>cmake -B build -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=Debug
+</span><span>cmake --build build
+</span><span>cd </span><span style=color:#61afef>build
+</span><span style=color:#61afef>ctest </span><span>--output-on-failure
+</span></code></pre><p>Then generate the coverage report:<pre class=language-cpp data-lang=cpp style=background:#282c34;color:#abb2bf><code class=language-cpp data-lang=cpp><span>lcov --directory . --</span><span style=color:#e06c75>capture </span><span>--output-file coverage.</span><span style=color:#e06c75>info </span><span>--rc geninfo_auto_base=</span><span style=color:#d19a66>1 </span><span>--ignore-errors mismatch
+</span><span>lcov --remove coverage.</span><span style=color:#e06c75>info </span><span style=color:#98c379>'/usr/*' '*/tests/*' </span><span>--output-file coverage.</span><span style=color:#e06c75>filtered</span><span>.</span><span style=color:#e06c75>info
+</span><span>genhtml coverage.</span><span style=color:#e06c75>filtered</span><span>.</span><span style=color:#e06c75>info </span><span>--output-directory coverage-report
+</span></code></pre><p>Open this in your browser:<pre style=background:#282c34;color:#abb2bf><code><span>build/coverage-report/index.html
+</span></code></pre><video class=cast controls src=/casts/cpp-coverage-example.webm>Your browser does not support the video tag.</video><h2 id=5-automation>5. Automation</h2><p>Now, having the coverage report in place is a great start. But it's not enough to just have the coverage report. You need to automate it so that every time you run your tests, you get a detailed report of what was covered and what wasn't.<p>To get started, you can setup a GitHub workflow with threshold tests, upload the reports or do post-processing on the report.<p>Either way, the key is to have a way to run tests and generate reports. Here's an example workflow:<ul><li><a href=https://github.com/svnscha/cpp-coverage-example/blob/main/.github/workflows/coverage.yml>.github/workflows/coverage.yml</a><li><a href=https://github.com/svnscha/cpp-coverage-example/pull/1>Example Pull Request failing because of missing coverage</a><li><a href=https://github.com/svnscha/cpp-coverage-example/pull/2>Example Pull Request passing coverage tests</a></ul><h2 id=summary>Summary</h2><table><thead><tr><th>Step<th>What You Did<tbody><tr><td>1. Install<td>Set up <code>lcov</code>, gtest, gcc, and cmake<tr><td>2. Build<td>Compiled with --coverage and no optimizations<tr><td>3. Test<td>Hit both happy paths and edge cases<tr><td>4. Report<td>Generated detailed HTML coverage report</table><h2 id=conclusion>Conclusion</h2><p>Code coverage doesn't guarantee perfect tests, but it gives you visibility. When paired with thoughtful test cases (especially edge cases), it helps ensure your code behaves correctly - even when things go sideways.<p>Even small utility classes deserve this level of care.<p>And with <code>lcov</code>, you can turn "I think I tested this" into "Yes, this line has been executed 12 times during CI."</section></article></main><hr><center><small>Copyright © 2025 Sven Scharmentke. All rights reserved.</small></center></div><script src=https://svnscha.de/lightbox.js></script>
