@@ -248,7 +248,7 @@ Your Docker hosts, Kubernetes clusters, database servers, message queues, revers
 
 After deploying uberAgent across my infrastructure, I quickly noticed one challenge: data volume. While the insights are invaluable, my home lab generates monitoring data at a pace that exceeds typical residential environments.
 
-With Splunk's free licensing constraints (500MB/day), I've implemented [Event Data Filters](https://docs.citrix.com/en-us/uberagent/7-4-0/uxm-features-configuration/event-data-filtering) as a temporary solution. However, I'm already contemplating the next evolution - developing a custom backend infrastructure with purpose-built visualization dashboards specifically optimized for my environment.
+With Splunk's free licensing constraints (500MB/day), I am implementing [Event Data Filters](https://docs.citrix.com/en-us/uberagent/7-4-0/uxm-features-configuration/event-data-filtering) as a solution and add a optimized data volume configuration. However, I'm already contemplating the next evolution - developing a custom backend infrastructure with purpose-built visualization dashboards specifically optimized for my environment.
 
 This technical challenge would be particularly engaging - balancing comprehensive visibility with resource efficiency. For now, though, the filters keep things manageable while I plan the next iteration of my monitoring architecture.
 
